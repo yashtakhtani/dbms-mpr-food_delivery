@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments — FoodFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i data-lucide="utensils-crosses"></i> FoodFlow</a>
+      <ul class="nav-links">
+        <li><a href="/"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="/customers"><i data-lucide="users"></i> Customers</a></li>
+        <li><a href="/restaurants"><i data-lucide="store"></i> Restaurants</a></li>
+        <li><a href="/menu"><i data-lucide="menu"></i> Menu</a></li>
+        <li><a href="/orders"><i data-lucide="package"></i> Orders</a></li>
+        <li><a href="/drivers"><i data-lucide="truck"></i> Drivers</a></li>
+        <li><a href="/payments" class="active"><i data-lucide="credit-card"></i> Payments</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Payment Transactions</h1>
+      <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="plus-circle"></i> Add
+        Payment</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search by ID, status or method..." oninput="renderTable()">
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Method</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <h2 id="modalTitle">Add Payment</h2>
+      <input type="hidden" id="editId">
+      <div class="form-group"><label>Payment ID</label><input type="number" id="fId" placeholder="e.g. 5001"></div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="fStatus">
+          <option value="SUCCESS">SUCCESS</option>
+          <option value="FAILED">FAILED</option>
+          <option value="PENDING">PENDING</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Amount (₹)</label><input type="number" id="fAmount" step="0.01"></div>
+      <div class="form-group"><label>Date</label><input type="date" id="fDate"></div>
+      <div class="form-group">
+        <label>Method</label>
+        <select id="fMethod">
+          <option value="UPI">UPI</option>
+          <option value="Credit Card">Credit Card</option>
+          <option value="Debit Card">Debit Card</option>
+          <option value="Net Banking">Net Banking</option>
+          <option value="Cash">Cash</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="save()">Save Transaction</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/payments.js"></script>
+</body>
+
+</html>

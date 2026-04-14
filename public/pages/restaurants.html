@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurants — FoodFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i data-lucide="utensils-crosses"></i> FoodFlow</a>
+      <ul class="nav-links">
+        <li><a href="/"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="/customers"><i data-lucide="users"></i> Customers</a></li>
+        <li><a href="/restaurants" class="active"><i data-lucide="store"></i> Restaurants</a></li>
+        <li><a href="/menu"><i data-lucide="menu"></i> Menu</a></li>
+        <li><a href="/orders"><i data-lucide="package"></i> Orders</a></li>
+        <li><a href="/drivers"><i data-lucide="truck"></i> Drivers</a></li>
+        <li><a href="/payments"><i data-lucide="credit-card"></i> Payments</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Partner Restaurants</h1>
+      <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="plus-circle"></i> Add
+        Restaurant</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search by name or location..." oninput="renderTable()">
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Rating</th>
+            <th>Phone</th>
+            <th>Location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <h2 id="modalTitle">Add Restaurant</h2>
+      <input type="hidden" id="editId">
+      <div class="form-group"><label>Restaurant ID</label><input type="number" id="fId" placeholder="e.g. R101"></div>
+      <div class="form-group"><label>Restaurant Name</label><input type="text" id="fName"></div>
+      <div class="form-group"><label>Rating (0-5)</label><input type="number" id="fRating" step="0.1" min="0" max="5">
+      </div>
+      <div class="form-group"><label>Phone Number</label><input type="text" id="fPhone"></div>
+      <div class="form-group"><label>Location / Address</label><input type="text" id="fLocation"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="save()">Save Restaurant</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/restaurants.js"></script>
+</body>
+
+</html>

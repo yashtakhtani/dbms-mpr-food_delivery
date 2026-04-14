@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu — FoodFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i data-lucide="utensils-crosses"></i> FoodFlow</a>
+      <ul class="nav-links">
+        <li><a href="/"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="/customers"><i data-lucide="users"></i> Customers</a></li>
+        <li><a href="/restaurants"><i data-lucide="store"></i> Restaurants</a></li>
+        <li><a href="/menu" class="active"><i data-lucide="menu"></i> Menu</a></li>
+        <li><a href="/orders"><i data-lucide="package"></i> Orders</a></li>
+        <li><a href="/drivers"><i data-lucide="truck"></i> Drivers</a></li>
+        <li><a href="/payments"><i data-lucide="credit-card"></i> Payments</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Menu Management</h1>
+      <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="plus-circle"></i> Add Food
+        Item</button>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Rating</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <h2 id="modalTitle">Add Food Item</h2>
+      <input type="hidden" id="editId">
+      <div class="form-group"><label>Item ID</label><input type="text" id="fId" placeholder="e.g. F101"></div>
+      <div class="form-group"><label>Food Name</label><input type="text" id="fName"></div>
+      <div class="form-group"><label>Price (₹)</label><input type="number" id="fPrice"></div>
+      <div class="form-group"><label>Rating</label><input type="number" id="fRating" step="0.1" min="0" max="5"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="save()">Save Item</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/menu.js"></script>
+</body>
+
+</html>

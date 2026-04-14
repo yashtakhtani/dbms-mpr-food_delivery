@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders — FoodFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i data-lucide="utensils-crosses"></i> FoodFlow</a>
+      <ul class="nav-links">
+        <li><a href="/"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="/customers"><i data-lucide="users"></i> Customers</a></li>
+        <li><a href="/restaurants"><i data-lucide="store"></i> Restaurants</a></li>
+        <li><a href="/menu"><i data-lucide="menu"></i> Menu</a></li>
+        <li><a href="/orders" class="active"><i data-lucide="package"></i> Orders</a></li>
+        <li><a href="/drivers"><i data-lucide="truck"></i> Drivers</a></li>
+        <li><a href="/payments"><i data-lucide="credit-card"></i> Payments</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Orders History</h1>
+      <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="plus-circle"></i> Place New
+        Order</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search orders by ID, customer or restaurant..."
+        oninput="renderTable()">
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Restaurant</th>
+            <th>Driver</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <h2>Place New Order</h2>
+      <div class="form-group"><label>Order ID</label><input type="number" id="fId" placeholder="e.g. 1001"></div>
+      <div class="form-group"><label>Order Date</label><input type="date" id="fDate"></div>
+      <div class="form-group"><label>Amount (₹)</label><input type="number" id="fAmount" step="0.01"></div>
+      <div class="form-group"><label>Customer ID</label><input type="text" id="fCust" placeholder="e.g. C001"></div>
+      <div class="form-group"><label>Restaurant ID</label><input type="number" id="fRest"></div>
+      <div class="form-group"><label>Driver ID</label><input type="number" id="fDriver"></div>
+      <div class="form-group"><label>Payment ID</label><input type="number" id="fPayment"></div>
+      <div class="form-group"><label>Food Items (comma-separated names)</label><input type="text" id="fFoods"
+          placeholder="e.g. Pizza, Salad"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="save()">Confirm Order</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/orders.js"></script>
+</body>
+
+</html>

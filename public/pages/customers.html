@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customers — FoodFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i data-lucide="utensils-crosses"></i> FoodFlow</a>
+      <ul class="nav-links">
+        <li><a href="/"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="/customers" class="active"><i data-lucide="users"></i> Customers</a></li>
+        <li><a href="/restaurants"><i data-lucide="store"></i> Restaurants</a></li>
+        <li><a href="/menu"><i data-lucide="menu"></i> Menu</a></li>
+        <li><a href="/orders"><i data-lucide="package"></i> Orders</a></li>
+        <li><a href="/drivers"><i data-lucide="truck"></i> Drivers</a></li>
+        <li><a href="/payments"><i data-lucide="credit-card"></i> Payments</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="page-header">
+      <h1>Customers</h1>
+      <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="user-plus"></i> Add
+        Customer</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search customers..." oninput="renderTable()">
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone(s)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <h2 id="modalTitle">Add Customer</h2>
+      <input type="hidden" id="editId">
+      <div class="form-group"><label>Customer ID</label><input type="text" id="fId" placeholder="e.g. C101"></div>
+      <div class="form-group"><label>Name</label><input type="text" id="fName"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="fEmail"></div>
+      <div class="form-group"><label>Address</label><input type="text" id="fAddress"></div>
+      <div class="form-group"><label>Phone (comma-separated)</label><input type="text" id="fPhone"
+          placeholder="9876543210"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="save()">Save Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/customers.js"></script>
+</body>
+
+</html>
