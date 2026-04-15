@@ -1,18 +1,29 @@
 let data = [];
 
-async function load() {
-  data = await api('/api/customers');
-  renderTable();
-}
+const SORT_CFG = { idKey: 'customer_id', nameKey: 'customer_name' };
+const EXPORT_COLS = [
+  { header: 'ID', key: 'customer_id' },
+  { header: 'Name', key: 'customer_name' },
+  { header: 'Email', key: 'email' },
+  { header: 'Address', key: 'address' },
+  { header: 'Phones', key: 'phones' }
+];
 
-function renderTable() {
+function getDisplayRows() {
   const q = document.getElementById('search').value.toLowerCase();
-  const filtered = data.filter(c =>
+  let filtered = data.filter(c =>
     c.customer_id.toLowerCase().includes(q) ||
     c.customer_name.toLowerCase().includes(q) ||
     (c.email || '').toLowerCase().includes(q)
   );
-  document.getElementById('tbody').innerHTML = filtered.map(c => `
+  const sortEl = document.getElementById('sortSelect');
+  const mode = sortEl ? sortEl.value : 'default';
+  return TableTools.sortRows(filtered, mode, SORT_CFG);
+}
+
+function renderTable() {
+  const rows = getDisplayRows();
+  document.getElementById('tbody').innerHTML = rows.map(c => `
     <tr>
       <td><strong>${c.customer_id}</strong></td>
       <td>${c.customer_name}</td>
@@ -83,5 +94,17 @@ function resetForm() {
 document.querySelector('.modal-overlay').addEventListener('click', e => {
   if (e.target === e.currentTarget) { closeModal('addModal'); resetForm(); }
 });
+
+TableTools.wireExportButtons({
+  getRows: getDisplayRows,
+  columns: EXPORT_COLS,
+  baseFilename: 'customers',
+  pdfTitle: 'FoodFlow — Customers'
+});
+
+async function load() {
+  data = await api('/api/customers');
+  renderTable();
+}
 
 load();

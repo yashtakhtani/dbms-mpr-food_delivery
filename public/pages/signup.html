@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — FoodFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="auth-page">
+  <div class="auth-shell">
+    <aside class="auth-aside">
+      <a href="/" class="auth-aside-brand"><i data-lucide="utensils-crossed"></i> FoodFlow</a>
+      <p class="auth-aside-tagline">Online Food Ordering &amp; Management System</p>
+    </aside>
+    <div class="auth-panel">
+      <div class="auth-card">
+        <header class="auth-card-header">
+          <h1>Create your account</h1>
+          <p class="auth-sub">Enter your details below to register and access the dashboard.</p>
+        </header>
+
+        <form id="signupForm">
+          <div class="form-group">
+            <label for="full_name">Full name</label>
+            <input type="text" id="full_name" placeholder="e.g. Jane Doe" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="e.g. jane.ops" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Choose a secure password" required autocomplete="new-password">
+          </div>
+          <button type="submit" class="auth-submit">Continue</button>
+        </form>
+
+        <div class="auth-footer">
+          Already have an account? <a href="/login">Log in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts" class="toast-container"></div>
+
+  <script src="/js/utils.js"></script>
+  <script>
+    lucide.createIcons();
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const full_name = document.getElementById('full_name').value;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ full_name, username, password })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Signup failed');
+
+        toast('Account created! Please log in.', 'success');
+        setTimeout(() => { window.location.href = '/login'; }, 1500);
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>

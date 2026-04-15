@@ -9,61 +9,75 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="nav-brand"><i data-lucide="utensils-crosses"></i> FoodFlow</a>
-      <ul class="nav-links">
-        <li><a href="/" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
-        <li><a href="/customers"><i data-lucide="users"></i> Customers</a></li>
-        <li><a href="/restaurants"><i data-lucide="store"></i> Restaurants</a></li>
-        <li><a href="/menu"><i data-lucide="menu"></i> Menu</a></li>
-        <li><a href="/orders"><i data-lucide="package"></i> Orders</a></li>
-        <li><a href="/drivers"><i data-lucide="truck"></i> Drivers</a></li>
-        <li><a href="/payments"><i data-lucide="credit-card"></i> Payments</a></li>
-      </ul>
-    </div>
-  </nav>
+  <div class="app-container">
+    <aside class="sidebar" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <a href="/" class="sidebar-brand"><i data-lucide="utensils-crossed"></i><span>FoodFlow</span></a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/" class="sidebar-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="/customers" class="sidebar-link"><i data-lucide="users"></i> Customers</a>
+        <a href="/restaurants" class="sidebar-link"><i data-lucide="store"></i> Restaurants</a>
+        <a href="/menu" class="sidebar-link"><i data-lucide="menu"></i> Menu</a>
+        <a href="/orders" class="sidebar-link"><i data-lucide="package"></i> Orders</a>
+        <a href="/drivers" class="sidebar-link"><i data-lucide="truck"></i> Drivers</a>
+        <a href="/payments" class="sidebar-link"><i data-lucide="credit-card"></i> Payments</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button type="button" class="sidebar-link sidebar-link-btn" onclick="logout()"><i data-lucide="log-out"></i> Log out</button>
+      </div>
+    </aside>
+    <div class="main-content">
+      <header class="top-bar">
+        <div class="user-profile" id="userChip" title="Signed in">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span class="user-name" id="userName">Account</span>
+        </div>
+      </header>
+      <main class="page-main">
+        <section class="dashboard-hero">
+          <div class="dashboard-hero-inner">
+            <div class="dashboard-hero-badge"><i data-lucide="sparkles"></i> Operations hub</div>
+            <h1>Welcome to FoodFlow</h1>
+            <p>A clear, focused workspace for customers, menus, orders, drivers, and payments.</p>
+          </div>
+        </section>
 
-  <div class="hero">
-    <div class="container">
-      <h1>FoodFlow.</h1>
-      <p>A professional, minimal management system for modern food ordering operations.</p>
-    </div>
-  </div>
+        <div class="container dashboard-body">
+          <div class="stats-grid" id="stats">
+            <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
+            <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
+            <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
+          </div>
 
-  <div class="container" style="margin-top: -3rem;">
-    <div class="stats-grid" id="stats">
-      <!-- Loading placeholders -->
-      <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
-      <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
-      <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
-    </div>
-
-    <div class="quick-links">
-      <a href="/customers" class="quick-link">
-        <div class="quick-link-icon" style="background:var(--blue-light); color:var(--blue)"><i data-lucide="users"></i></div>
-        <div class="quick-link-text"><h3>Customers</h3><p>Manage customer records & profiles</p></div>
-      </a>
-      <a href="/restaurants" class="quick-link">
-        <div class="quick-link-icon" style="background:var(--green-light); color:var(--green)"><i data-lucide="store"></i></div>
-        <div class="quick-link-text"><h3>Restaurants</h3><p>View & edit partner restaurants</p></div>
-      </a>
-      <a href="/menu" class="quick-link">
-        <div class="quick-link-icon" style="background:var(--yellow-light); color:var(--yellow)"><i data-lucide="utensils"></i></div>
-        <div class="quick-link-text"><h3>Menu Items</h3><p>Browse & manage food catalogs</p></div>
-      </a>
-      <a href="/orders" class="quick-link">
-        <div class="quick-link-icon" style="background:#f3f4f6; color:#4b5563"><i data-lucide="package"></i></div>
-        <div class="quick-link-text"><h3>Orders</h3><p>Track live and past transactions</p></div>
-      </a>
-      <a href="/drivers" class="quick-link">
-        <div class="quick-link-icon" style="background:var(--red-light); color:var(--red)"><i data-lucide="truck"></i></div>
-        <div class="quick-link-text"><h3>Drivers</h3><p>Manage delivery personnel fleets</p></div>
-      </a>
-      <a href="/payments" class="quick-link">
-        <div class="quick-link-icon" style="background:var(--blue-light); color:var(--accent)"><i data-lucide="credit-card"></i></div>
-        <div class="quick-link-text"><h3>Payments</h3><p>Review financial transactions</p></div>
-      </a>
+          <div class="quick-links">
+            <a href="/customers" class="quick-link">
+              <div class="quick-link-icon" style="background:var(--blue-light); color:var(--blue)"><i data-lucide="users"></i></div>
+              <div class="quick-link-text"><h3>Customers</h3><p>Manage customer records & profiles</p></div>
+            </a>
+            <a href="/restaurants" class="quick-link">
+              <div class="quick-link-icon" style="background:var(--green-light); color:var(--green)"><i data-lucide="store"></i></div>
+              <div class="quick-link-text"><h3>Restaurants</h3><p>View & edit partner restaurants</p></div>
+            </a>
+            <a href="/menu" class="quick-link">
+              <div class="quick-link-icon" style="background:var(--yellow-light); color:var(--yellow)"><i data-lucide="utensils"></i></div>
+              <div class="quick-link-text"><h3>Menu Items</h3><p>Browse & manage food catalogs</p></div>
+            </a>
+            <a href="/orders" class="quick-link">
+              <div class="quick-link-icon quick-link-icon--muted"><i data-lucide="package"></i></div>
+              <div class="quick-link-text"><h3>Orders</h3><p>Track live and past transactions</p></div>
+            </a>
+            <a href="/drivers" class="quick-link">
+              <div class="quick-link-icon" style="background:var(--red-light); color:var(--red)"><i data-lucide="truck"></i></div>
+              <div class="quick-link-text"><h3>Drivers</h3><p>Manage delivery personnel fleets</p></div>
+            </a>
+            <a href="/payments" class="quick-link">
+              <div class="quick-link-icon" style="background:var(--blue-light); color:var(--accent)"><i data-lucide="credit-card"></i></div>
+              <div class="quick-link-text"><h3>Payments</h3><p>Review financial transactions</p></div>
+            </a>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 
@@ -95,7 +109,7 @@
           </div>
           <div class="stat-card" style="border-color:var(--green)">
             <div class="stat-label" style="color:var(--green)"><i data-lucide="trending-up" style="width:14px"></i> Revenue</div>
-            <div class="stat-value">₹${Number(s.revenue).toLocaleString()}</div>
+            <div class="stat-value">\u20B9${Number(s.revenue).toLocaleString()}</div>
           </div>
         `;
         lucide.createIcons();

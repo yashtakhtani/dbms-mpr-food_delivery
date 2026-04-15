@@ -10,22 +10,33 @@
 </head>
 
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="nav-brand"><i data-lucide="utensils-crosses"></i> FoodFlow</a>
-      <ul class="nav-links">
-        <li><a href="/"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
-        <li><a href="/customers"><i data-lucide="users"></i> Customers</a></li>
-        <li><a href="/restaurants" class="active"><i data-lucide="store"></i> Restaurants</a></li>
-        <li><a href="/menu"><i data-lucide="menu"></i> Menu</a></li>
-        <li><a href="/orders"><i data-lucide="package"></i> Orders</a></li>
-        <li><a href="/drivers"><i data-lucide="truck"></i> Drivers</a></li>
-        <li><a href="/payments"><i data-lucide="credit-card"></i> Payments</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="container">
+  <div class="app-container">
+    <aside class="sidebar" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <a href="/" class="sidebar-brand"><i data-lucide="utensils-crossed"></i><span>FoodFlow</span></a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/" class="sidebar-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="/customers" class="sidebar-link"><i data-lucide="users"></i> Customers</a>
+        <a href="/restaurants" class="sidebar-link"><i data-lucide="store"></i> Restaurants</a>
+        <a href="/menu" class="sidebar-link"><i data-lucide="menu"></i> Menu</a>
+        <a href="/orders" class="sidebar-link"><i data-lucide="package"></i> Orders</a>
+        <a href="/drivers" class="sidebar-link"><i data-lucide="truck"></i> Drivers</a>
+        <a href="/payments" class="sidebar-link"><i data-lucide="credit-card"></i> Payments</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button type="button" class="sidebar-link sidebar-link-btn" onclick="logout()"><i data-lucide="log-out"></i> Log out</button>
+      </div>
+    </aside>
+    <div class="main-content">
+      <header class="top-bar">
+        <div class="user-profile" id="userChip" title="Signed in">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span class="user-name" id="userName">Account</span>
+        </div>
+      </header>
+      <main class="page-main">
+        <div class="container">
     <div class="page-header">
       <h1>Partner Restaurants</h1>
       <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="plus-circle"></i> Add
@@ -33,6 +44,21 @@
     </div>
     <div class="search-bar">
       <input type="text" id="search" placeholder="Search by name or location..." oninput="renderTable()">
+    </div>
+    <div class="table-toolbar">
+      <div class="table-toolbar-left">
+        <label class="sr-only" for="sortSelect">Sort table</label>
+        <select id="sortSelect" class="table-toolbar-select" onchange="renderTable()">
+          <option value="default">Default order</option>
+          <option value="asc">Sort: ID ascending</option>
+          <option value="desc">Sort: ID descending</option>
+          <option value="name">Sort: By name (A–Z)</option>
+        </select>
+      </div>
+      <div class="table-toolbar-right">
+        <button type="button" class="btn btn-secondary btn-sm" id="exportCsvBtn"><i data-lucide="download"></i> CSV</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="exportPdfBtn"><i data-lucide="file-text"></i> PDF</button>
+      </div>
     </div>
     <div class="table-wrapper">
       <table>
@@ -48,6 +74,9 @@
         </thead>
         <tbody id="tbody"></tbody>
       </table>
+    </div>
+        </div>
+      </main>
     </div>
   </div>
 
@@ -68,7 +97,10 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script src="/js/utils.js"></script>
+  <script src="/js/table-tools.js"></script>
   <script src="/js/restaurants.js"></script>
 </body>
 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — FoodFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="auth-page">
+  <div class="auth-shell">
+    <aside class="auth-aside">
+      <a href="/" class="auth-aside-brand"><i data-lucide="utensils-crossed"></i> FoodFlow</a>
+      <p class="auth-aside-tagline">Online Food Ordering &amp; Management System</p>
+    </aside>
+    <div class="auth-panel">
+      <div class="auth-card">
+        <header class="auth-card-header">
+          <h1>Sign in to your account</h1>
+          <p class="auth-sub">Enter your username below to log into the dashboard.</p>
+        </header>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="e.g. jane.ops" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <div class="auth-label-row">
+              <label for="password">Password</label>
+              <a href="#" class="auth-forgot" id="forgotPw">Forgot your password?</a>
+            </div>
+            <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="auth-submit">Continue</button>
+        </form>
+
+        <div class="auth-footer">
+          Don&apos;t have an account? <a href="/signup">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts" class="toast-container"></div>
+
+  <script src="/js/utils.js"></script>
+  <script>
+    lucide.createIcons();
+
+    document.getElementById('forgotPw').addEventListener('click', (e) => {
+      e.preventDefault();
+      toast('Contact your administrator to reset your password.', 'info');
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Login failed');
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        toast('Logged in successfully!', 'success');
+        setTimeout(() => { window.location.href = '/'; }, 1000);
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>
