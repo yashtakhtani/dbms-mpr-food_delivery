@@ -5,7 +5,7 @@ const db = require('../config/db');
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT f.*, r.restaurant_name FROM food_item f
+      SELECT f.*, r.restaurant_name, r.rating AS restaurant_rating FROM food_item f
       LEFT JOIN restaurant r ON f.restaurant_id = r.restaurant_id
       ORDER BY f.food_name
     `);

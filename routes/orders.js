@@ -21,9 +21,9 @@ router.get('/', async (req, res) => {
 router.get('/:id/foods', async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT of.food_name, fi.price FROM order_food of
-      LEFT JOIN food_item fi ON of.food_name = fi.food_name
-      WHERE of.order_id = ?
+      SELECT ofr.food_name, fi.price FROM order_food AS ofr
+      LEFT JOIN food_item fi ON ofr.food_name = fi.food_name
+      WHERE ofr.order_id = ?
     `, [req.params.id]);
     res.json(rows);
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -36,9 +36,30 @@ router.post('/', async (req, res) => {
     await conn.beginTransaction();
     await conn.query('INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?, ?)',
       [order_id, order_date, amount, customer_id, restaurant_id, driver_id, payment_id]);
-    if (foods && foods.length) {
-      for (const food of foods) {
-        await conn.query('INSERT INTO order_food VALUES (?, ?)', [order_id, food]);
+
+    const normalizedFoods = Array.isArray(foods)
+      ? foods.map((s) => String(s).trim()).filter(Boolean)
+      : [];
+
+    if (normalizedFoods.length) {
+      // Validate food names exist to avoid FK errors and give a clearer response.
+      const lowerFoods = normalizedFoods.map((f) => f.toLowerCase());
+      const [existing] = await conn.query(
+        'SELECT food_name, LOWER(food_name) AS k FROM food_item WHERE LOWER(food_name) IN (?)',
+        [lowerFoods]
+      );
+
+      const map = new Map(existing.map((r) => [r.k, r.food_name]));
+      const missing = lowerFoods.filter((k) => !map.has(k));
+      if (missing.length) {
+        await conn.rollback();
+        return res.status(400).json({
+          error: `Unknown food item(s): ${missing.join(', ')}. Add them in Menu first (names must match).`
+        });
+      }
+
+      for (const k of lowerFoods) {
+        await conn.query('INSERT INTO order_food VALUES (?, ?)', [order_id, map.get(k)]);
       }
     }
     await conn.commit();
@@ -48,10 +69,22 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
+  const orderId = req.params.id;
+  const conn = await db.getConnection();
   try {
-    await db.query('DELETE FROM orders WHERE order_id = ?', [req.params.id]);
+    await conn.beginTransaction();
+    await conn.query('DELETE FROM order_food WHERE order_id = ?', [orderId]);
+    const [result] = await conn.query('DELETE FROM orders WHERE order_id = ?', [orderId]);
+    await conn.commit();
+
+    if (!result.affectedRows) return res.status(404).json({ error: 'Not found' });
     res.json({ message: 'Order deleted' });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    await conn.rollback();
+    res.status(500).json({ error: err.message });
+  } finally {
+    conn.release();
+  }
 });
 
 module.exports = router;

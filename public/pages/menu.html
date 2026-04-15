@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu — FoodFlow</title>
+  <title>FoodFlow</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2'/><path d='M7 2v20'/><path d='M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7'/></svg>">
   <link rel="stylesheet" href="/css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -25,7 +27,8 @@
         <a href="/payments" class="sidebar-link"><i data-lucide="credit-card"></i> Payments</a>
       </nav>
       <div class="sidebar-footer">
-        <button type="button" class="sidebar-link sidebar-link-btn" onclick="logout()"><i data-lucide="log-out"></i> Log out</button>
+        <button type="button" class="sidebar-link sidebar-link-btn" onclick="logout()"><i data-lucide="log-out"></i> Log
+          out</button>
       </div>
     </aside>
     <div class="main-content">
@@ -37,40 +40,42 @@
       </header>
       <main class="page-main">
         <div class="container">
-    <div class="page-header">
-      <h1>Menu Management</h1>
-      <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="plus-circle"></i> Add Food
-        Item</button>
-    </div>
-    <div class="table-toolbar">
-      <div class="table-toolbar-left">
-        <label class="sr-only" for="sortSelect">Sort table</label>
-        <select id="sortSelect" class="table-toolbar-select" onchange="renderTable()">
-          <option value="default">Default order</option>
-          <option value="asc">Sort: ID ascending</option>
-          <option value="desc">Sort: ID descending</option>
-          <option value="name">Sort: By name (A–Z)</option>
-        </select>
-      </div>
-      <div class="table-toolbar-right">
-        <button type="button" class="btn btn-secondary btn-sm" id="exportCsvBtn"><i data-lucide="download"></i> CSV</button>
-        <button type="button" class="btn btn-secondary btn-sm" id="exportPdfBtn"><i data-lucide="file-text"></i> PDF</button>
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Rating</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
+          <div class="page-header">
+            <h1>Menu Management</h1>
+            <button class="btn btn-primary" onclick="openModal('addModal')"><i data-lucide="plus-circle"></i> Add Food
+              Item</button>
+          </div>
+          <div class="table-toolbar">
+            <div class="table-toolbar-left">
+              <label class="sr-only" for="sortSelect">Sort table</label>
+              <select id="sortSelect" class="table-toolbar-select" onchange="renderTable()">
+                <option value="default">Default order</option>
+                <option value="asc">Sort: ID ascending</option>
+                <option value="desc">Sort: ID descending</option>
+                <option value="name">Sort: By name (A–Z)</option>
+              </select>
+            </div>
+            <div class="table-toolbar-right">
+              <button type="button" class="btn btn-secondary btn-sm" id="exportCsvBtn"><i data-lucide="download"></i>
+                CSV</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="exportPdfBtn"><i data-lucide="file-text"></i>
+                PDF</button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Rating</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
         </div>
       </main>
     </div>
@@ -80,10 +85,9 @@
     <div class="modal">
       <h2 id="modalTitle">Add Food Item</h2>
       <input type="hidden" id="editId">
-      <div class="form-group"><label>Item ID</label><input type="text" id="fId" placeholder="e.g. F101"></div>
-      <div class="form-group"><label>Food Name</label><input type="text" id="fName"></div>
+      <div class="form-group"><label>Food Name</label><input type="text" id="fName" placeholder="e.g. Pizza"></div>
+      <div class="form-group"><label>Restaurant ID</label><input type="number" id="fRest" placeholder="e.g. 1"></div>
       <div class="form-group"><label>Price (₹)</label><input type="number" id="fPrice"></div>
-      <div class="form-group"><label>Rating</label><input type="number" id="fRating" step="0.1" min="0" max="5"></div>
       <div class="modal-actions">
         <button class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
         <button class="btn btn-primary" onclick="save()">Save Item</button>
@@ -93,6 +97,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="/js/three-bg.js"></script>
   <script src="/js/utils.js"></script>
   <script src="/js/table-tools.js"></script>
   <script src="/js/menu.js"></script>

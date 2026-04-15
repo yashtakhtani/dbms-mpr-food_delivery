@@ -10,10 +10,14 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { payment_id, payment_status, amount, payment_date, payment_method } = req.body;
+  let { payment_id, payment_status, amount, payment_date, payment_method } = req.body;
   try {
+    if (!payment_id) {
+      const [[next]] = await db.query('SELECT COALESCE(MAX(payment_id), 0) + 1 AS next_id FROM payment');
+      payment_id = next.next_id;
+    }
     await db.query('INSERT INTO payment VALUES (?, ?, ?, ?, ?)',
-      [payment_id, payment_status, amount, payment_date, payment_method]);
+      [payment_id, payment_status, amount, payment_date || new Date(), payment_method]);
     res.status(201).json({ message: 'Payment added' });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -22,7 +26,7 @@ router.put('/:id', async (req, res) => {
   const { payment_status, amount, payment_date, payment_method } = req.body;
   try {
     await db.query('UPDATE payment SET payment_status=?, amount=?, payment_date=?, payment_method=? WHERE payment_id=?',
-      [payment_status, amount, payment_date, payment_method, req.params.id]);
+      [payment_status, amount, payment_date || new Date(), payment_method, req.params.id]);
     res.json({ message: 'Payment updated' });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

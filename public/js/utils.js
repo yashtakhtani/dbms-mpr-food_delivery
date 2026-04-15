@@ -2,6 +2,12 @@ try {
   if (localStorage.getItem('foodflow-theme') === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
+  const savedVariant = localStorage.getItem('foodflow-ui-variant');
+  if (savedVariant === 'minimal' || savedVariant === 'neon') {
+    document.documentElement.setAttribute('data-ui-variant', savedVariant);
+  } else {
+    document.documentElement.setAttribute('data-ui-variant', 'minimal');
+  }
 } catch (e) { /* ignore */ }
 
 const API = '';
@@ -128,6 +134,35 @@ function syncThemeToggleIcons() {
   });
 }
 
+function getUiVariant() {
+  const v = document.documentElement.getAttribute('data-ui-variant');
+  return v === 'neon' ? 'neon' : 'minimal';
+}
+
+function syncUiVariantToggle() {
+  const variant = getUiVariant();
+  document.querySelectorAll('.variant-icon-minimal').forEach((el) => {
+    el.style.display = variant === 'minimal' ? '' : 'none';
+  });
+  document.querySelectorAll('.variant-icon-neon').forEach((el) => {
+    el.style.display = variant === 'neon' ? '' : 'none';
+  });
+  const btn = document.getElementById('variantToggle');
+  if (btn) {
+    btn.title = variant === 'minimal' ? 'Switch to Premium Neon Glass' : 'Switch to Super Minimal';
+    btn.setAttribute('aria-label', btn.title);
+  }
+}
+
+function setUiVariant(variant) {
+  const next = variant === 'neon' ? 'neon' : 'minimal';
+  document.documentElement.setAttribute('data-ui-variant', next);
+  try {
+    localStorage.setItem('foodflow-ui-variant', next);
+  } catch (e) { /* ignore */ }
+  syncUiVariantToggle();
+}
+
 function initDashboardChrome() {
   const top = document.querySelector('.top-bar');
   if (!top || top.dataset.chromeInit) return;
@@ -136,6 +171,10 @@ function initDashboardChrome() {
   const chrome = document.createElement('div');
   chrome.className = 'top-bar-chrome';
   chrome.innerHTML = `
+    <button type="button" class="icon-btn" id="variantToggle" title="Switch visual style" aria-label="Switch visual style">
+      <i data-lucide="panel-top" class="variant-icon-minimal"></i>
+      <i data-lucide="sparkles" class="variant-icon-neon" style="display:none"></i>
+    </button>
     <button type="button" class="icon-btn" id="themeToggle" title="Light / dark mode" aria-label="Toggle theme">
       <i data-lucide="sun" class="theme-icon-light"></i>
       <i data-lucide="moon" class="theme-icon-dark" style="display:none"></i>
@@ -143,12 +182,19 @@ function initDashboardChrome() {
   `;
   top.insertBefore(chrome, top.firstChild);
 
+  document.getElementById('variantToggle').addEventListener('click', () => {
+    const next = getUiVariant() === 'minimal' ? 'neon' : 'minimal';
+    setUiVariant(next);
+    if (window.lucide) lucide.createIcons();
+  });
+
   document.getElementById('themeToggle').addEventListener('click', () => {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
     setTheme(dark ? 'light' : 'dark');
     if (window.lucide) lucide.createIcons();
   });
 
+  syncUiVariantToggle();
   syncThemeToggleIcons();
   if (window.lucide) lucide.createIcons();
 }

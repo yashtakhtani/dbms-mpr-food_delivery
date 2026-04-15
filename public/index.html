@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FoodFlow — Professional Ordering System</title>
+  <title>FoodFlow</title>
   <meta name="description" content="Online Food Ordering System - DBMS Mini Project">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2'/><path d='M7 2v20'/><path d='M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7'/></svg>">
   <link rel="stylesheet" href="/css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
   <div class="app-container">
     <aside class="sidebar" aria-label="Main navigation">
@@ -24,7 +28,8 @@
         <a href="/payments" class="sidebar-link"><i data-lucide="credit-card"></i> Payments</a>
       </nav>
       <div class="sidebar-footer">
-        <button type="button" class="sidebar-link sidebar-link-btn" onclick="logout()"><i data-lucide="log-out"></i> Log out</button>
+        <button type="button" class="sidebar-link sidebar-link-btn" onclick="logout()"><i data-lucide="log-out"></i> Log
+          out</button>
       </div>
     </aside>
     <div class="main-content">
@@ -45,35 +50,67 @@
 
         <div class="container dashboard-body">
           <div class="stats-grid" id="stats">
-            <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
-            <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
-            <div class="stat-card"><div class="stat-label">...</div><div class="stat-value">--</div></div>
+            <div class="stat-card">
+              <div class="stat-label">...</div>
+              <div class="stat-value">--</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">...</div>
+              <div class="stat-value">--</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">...</div>
+              <div class="stat-value">--</div>
+            </div>
           </div>
 
           <div class="quick-links">
             <a href="/customers" class="quick-link">
-              <div class="quick-link-icon" style="background:var(--blue-light); color:var(--blue)"><i data-lucide="users"></i></div>
-              <div class="quick-link-text"><h3>Customers</h3><p>Manage customer records & profiles</p></div>
+              <div class="quick-link-icon" style="background:var(--blue-light); color:var(--blue)"><i
+                  data-lucide="users"></i></div>
+              <div class="quick-link-text">
+                <h3>Customers</h3>
+                <p>Manage customer records & profiles</p>
+              </div>
             </a>
             <a href="/restaurants" class="quick-link">
-              <div class="quick-link-icon" style="background:var(--green-light); color:var(--green)"><i data-lucide="store"></i></div>
-              <div class="quick-link-text"><h3>Restaurants</h3><p>View & edit partner restaurants</p></div>
+              <div class="quick-link-icon" style="background:var(--green-light); color:var(--green)"><i
+                  data-lucide="store"></i></div>
+              <div class="quick-link-text">
+                <h3>Restaurants</h3>
+                <p>View & edit partner restaurants</p>
+              </div>
             </a>
             <a href="/menu" class="quick-link">
-              <div class="quick-link-icon" style="background:var(--yellow-light); color:var(--yellow)"><i data-lucide="utensils"></i></div>
-              <div class="quick-link-text"><h3>Menu Items</h3><p>Browse & manage food catalogs</p></div>
+              <div class="quick-link-icon" style="background:var(--yellow-light); color:var(--yellow)"><i
+                  data-lucide="utensils"></i></div>
+              <div class="quick-link-text">
+                <h3>Menu Items</h3>
+                <p>Browse & manage food catalogs</p>
+              </div>
             </a>
             <a href="/orders" class="quick-link">
               <div class="quick-link-icon quick-link-icon--muted"><i data-lucide="package"></i></div>
-              <div class="quick-link-text"><h3>Orders</h3><p>Track live and past transactions</p></div>
+              <div class="quick-link-text">
+                <h3>Orders</h3>
+                <p>Track live and past transactions</p>
+              </div>
             </a>
             <a href="/drivers" class="quick-link">
-              <div class="quick-link-icon" style="background:var(--red-light); color:var(--red)"><i data-lucide="truck"></i></div>
-              <div class="quick-link-text"><h3>Drivers</h3><p>Manage delivery personnel fleets</p></div>
+              <div class="quick-link-icon" style="background:var(--red-light); color:var(--red)"><i
+                  data-lucide="truck"></i></div>
+              <div class="quick-link-text">
+                <h3>Drivers</h3>
+                <p>Manage delivery personnel fleets</p>
+              </div>
             </a>
             <a href="/payments" class="quick-link">
-              <div class="quick-link-icon" style="background:var(--blue-light); color:var(--accent)"><i data-lucide="credit-card"></i></div>
-              <div class="quick-link-text"><h3>Payments</h3><p>Review financial transactions</p></div>
+              <div class="quick-link-icon" style="background:var(--blue-light); color:var(--accent)"><i
+                  data-lucide="credit-card"></i></div>
+              <div class="quick-link-text">
+                <h3>Payments</h3>
+                <p>Review financial transactions</p>
+              </div>
             </a>
           </div>
         </div>
@@ -81,7 +118,39 @@
     </div>
   </div>
 
+  <!-- Order Wizard Modal -->
+  <div class="modal-overlay" id="orderWizardModal">
+    <div class="modal modal-lg" style="max-width: 800px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header"
+        style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+        <h2 id="wizardTitle">Place New Order</h2>
+        <button class="icon-btn" onclick="closeOrderWizard()" style="border: none; background: none;"><i
+            data-lucide="x"></i></button>
+      </div>
+
+      <div class="wizard-progress" style="display: flex; gap: 8px; margin: 1.5rem 0;">
+        <div class="progress-step active" id="stepIndicator1"></div>
+        <div class="progress-step" id="stepIndicator2"></div>
+        <div class="progress-step" id="stepIndicator3"></div>
+        <div class="progress-step" id="stepIndicator4"></div>
+      </div>
+
+      <div class="wizard-content" id="wizardContent" style="flex: 1; overflow-y: auto; padding: 0.5rem 0;">
+        <!-- Steps will be injected here -->
+      </div>
+
+      <div class="modal-actions"
+        style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between;">
+        <button class="btn btn-secondary" id="wizPrevBtn" onclick="wizBack()" style="visibility: hidden;">Back</button>
+        <button class="btn btn-primary" id="wizNextBtn" onclick="wizNext()">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/js/three-bg.js"></script>
   <script src="/js/utils.js"></script>
+  <script src="/js/order-flow.js"></script>
   <script>
     async function loadStats() {
       try {
@@ -113,7 +182,7 @@
           </div>
         `;
         lucide.createIcons();
-      } catch(e) {
+      } catch (e) {
         document.getElementById('stats').innerHTML = '<div class="empty-state"><i data-lucide="alert-circle"></i><p>Could not load statistics. Please try again later.</p></div>';
         lucide.createIcons();
       }
@@ -122,4 +191,5 @@
     lucide.createIcons();
   </script>
 </body>
+
 </html>

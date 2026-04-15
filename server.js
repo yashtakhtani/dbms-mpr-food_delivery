@@ -16,6 +16,7 @@ app.use('/api/drivers', require('./routes/drivers'));
 app.use('/api/food-items', require('./routes/foodItems'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/payments', require('./routes/payments'));
+app.use('/api/checkout', require('./routes/checkout'));
 app.use('/api/stats', require('./routes/stats'));
 
 // Serve pages

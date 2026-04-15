@@ -45,7 +45,8 @@ function renderTable() {
 }
 
 function edit(id) {
-  const p = data.find(x => x.payment_id === id);
+  const p = data.find(x => String(x.payment_id) === String(id));
+  if (!p) return showToast('Payment not found', 'error');
   document.getElementById('modalTitle').textContent = 'Edit Payment';
   document.getElementById('editId').value = id;
   document.getElementById('fId').value = p.payment_id;
@@ -59,12 +60,22 @@ function edit(id) {
 
 async function save() {
   const editId = document.getElementById('editId').value;
+  const idValue = document.getElementById('fId').value;
+  const statusValue = document.getElementById('fStatus').value;
+  const amountValue = Number(document.getElementById('fAmount').value);
+  const dateValue = document.getElementById('fDate').value;
+  const methodValue = document.getElementById('fMethod').value;
+
+  if (!editId && !idValue) return showToast('Enter Payment ID for new payment', 'info');
+  if (!statusValue || !methodValue) return showToast('Select status and method', 'info');
+  if (!Number.isFinite(amountValue) || amountValue <= 0) return showToast('Enter a valid amount', 'info');
+
   const body = {
-    payment_id: +document.getElementById('fId').value,
-    payment_status: document.getElementById('fStatus').value,
-    amount: +document.getElementById('fAmount').value,
-    payment_date: document.getElementById('fDate').value,
-    payment_method: document.getElementById('fMethod').value
+    payment_id: idValue ? Number(idValue) : undefined,
+    payment_status: statusValue,
+    amount: amountValue,
+    payment_date: dateValue || undefined,
+    payment_method: methodValue
   };
   if (editId) {
     await api(`/api/payments/${editId}`, { method: 'PUT', body });
@@ -74,6 +85,7 @@ async function save() {
     showToast('Payment added');
   }
   closeModal('addModal');
+  resetForm();
   load();
 }
 
@@ -85,8 +97,19 @@ async function del(id) {
 }
 
 document.querySelector('.modal-overlay').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal('addModal');
+  if (e.target === e.currentTarget) { closeModal('addModal'); resetForm(); }
 });
+
+function resetForm() {
+  document.getElementById('editId').value = '';
+  document.getElementById('fId').value = '';
+  document.getElementById('fId').disabled = false;
+  document.getElementById('fStatus').value = 'SUCCESS';
+  document.getElementById('fAmount').value = '';
+  document.getElementById('fDate').value = '';
+  document.getElementById('fMethod').value = 'UPI';
+  document.getElementById('modalTitle').textContent = 'Add Payment';
+}
 
 TableTools.wireExportButtons({
   getRows: getDisplayRows,

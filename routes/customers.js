@@ -13,12 +13,26 @@ router.get('/', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+router.get('/by-phone/:phone', async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT c.*, cp.phone
+      FROM customer c
+      JOIN customer_phone cp ON c.customer_id = cp.customer_id
+      WHERE cp.phone = ?
+      LIMIT 1
+    `, [req.params.phone]);
+    if (!rows.length) return res.status(404).json({ error: 'Customer not found' });
+    res.json(rows[0]);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM customer WHERE customer_id = ?', [req.params.id]);
     if (!rows.length) return res.status(404).json({ error: 'Not found' });
     const [phones] = await db.query('SELECT phone FROM customer_phone WHERE customer_id = ?', [req.params.id]);
-    res.json({ ...rows[0], phones: phones.map(p => p.phone) });
+    res.json({ ...rows[0], phones: phones.map((p) => p.phone) });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -59,10 +73,35 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
+  const customerId = req.params.id;
+  const conn = await db.getConnection();
   try {
-    await db.query('DELETE FROM customer WHERE customer_id = ?', [req.params.id]);
+    await conn.beginTransaction();
+
+    // Clean up dependent rows first to satisfy FK constraints.
+    await conn.query('DELETE FROM customer_phone WHERE customer_id = ?', [customerId]);
+    await conn.query(
+      `
+        DELETE ofr
+        FROM order_food AS ofr
+        INNER JOIN orders AS o ON o.order_id = ofr.order_id
+        WHERE o.customer_id = ?
+      `,
+      [customerId]
+    );
+    await conn.query('DELETE FROM orders WHERE customer_id = ?', [customerId]);
+
+    const [result] = await conn.query('DELETE FROM customer WHERE customer_id = ?', [customerId]);
+    await conn.commit();
+
+    if (!result.affectedRows) return res.status(404).json({ error: 'Not found' });
     res.json({ message: 'Customer deleted' });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    await conn.rollback();
+    res.status(500).json({ error: err.message });
+  } finally {
+    conn.release();
+  }
 });
 
 module.exports = router;

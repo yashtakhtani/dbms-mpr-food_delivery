@@ -1,14 +1,14 @@
 let data = [];
 
 const SORT_CFG = {
-  idKey: (r) => r.food_id || r.food_name,
+  idKey: 'food_name',
   nameKey: 'food_name'
 };
 const EXPORT_COLS = [
-  { header: 'ID', accessor: (r) => r.food_id || r.food_name || '' },
   { header: 'Name', key: 'food_name' },
+  { header: 'Restaurant', accessor: (r) => r.restaurant_name || r.restaurant_id || '' },
   { header: 'Price', key: 'price' },
-  { header: 'Rating', key: 'rating' }
+  { header: 'Rating', accessor: (r) => r.restaurant_rating ?? '' }
 ];
 
 function getDisplayRows() {
@@ -22,38 +22,48 @@ function renderTable() {
   const rows = getDisplayRows();
   tbody.innerHTML = rows.map(i => `
     <tr>
-      <td><strong>${i.food_id || i.food_name}</strong></td>
+      <td><strong>${i.food_name}</strong></td>
       <td>${i.food_name}</td>
       <td>\u20B9${Number(i.price).toLocaleString()}</td>
-      <td><span class="rating">${'\u2605'.repeat(Math.round(i.rating || 0))}${'\u2606'.repeat(5 - Math.round(i.rating || 0))}</span></td>
+      <td>
+        <span class="rating">${'\u2605'.repeat(Math.round(i.restaurant_rating || 0))}${'\u2606'.repeat(5 - Math.round(i.restaurant_rating || 0))}</span>
+        <span style="font-size:0.8rem; color:var(--text-secondary); margin-left:4px">${i.restaurant_rating || 0}</span>
+      </td>
       <td class="actions">
-        <button class="btn btn-secondary btn-sm" onclick="edit(${JSON.stringify(String(i.food_id || i.food_name))})"><i data-lucide="edit-2" style="width:14px"></i></button>
-        <button class="btn btn-danger btn-sm" onclick="del(${JSON.stringify(String(i.food_id || i.food_name))})"><i data-lucide="trash-2" style="width:14px"></i></button>
+        <button class="btn btn-secondary btn-sm" onclick="editByKey('${encodeURIComponent(String(i.food_name))}')"><i data-lucide="edit-2" style="width:14px"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="delByKey('${encodeURIComponent(String(i.food_name))}')"><i data-lucide="trash-2" style="width:14px"></i></button>
       </td>
     </tr>
   `).join('');
   if (window.lucide) lucide.createIcons();
 }
 
+function editByKey(key) {
+  edit(decodeURIComponent(key));
+}
+
+function delByKey(key) {
+  del(decodeURIComponent(key));
+}
+
 function edit(id) {
-  const i = data.find(x => (x.food_id || x.food_name) === id);
+  const i = data.find(x => x.food_name === id);
+  if (!i) return showToast('Food item not found', 'error');
   document.getElementById('modalTitle').textContent = 'Edit Food Item';
   document.getElementById('editId').value = id;
-  document.getElementById('fId').value = i.food_id || '';
-  document.getElementById('fId').disabled = !!i.food_id;
   document.getElementById('fName').value = i.food_name;
+  document.getElementById('fName').disabled = true;
+  document.getElementById('fRest').value = i.restaurant_id || '';
   document.getElementById('fPrice').value = i.price;
-  document.getElementById('fRating').value = i.rating || '';
   openModal('addModal');
 }
 
 async function save() {
   const editId = document.getElementById('editId').value;
   const body = {
-    food_id: document.getElementById('fId').value,
     food_name: document.getElementById('fName').value,
     price: Number(document.getElementById('fPrice').value),
-    rating: Number(document.getElementById('fRating').value)
+    restaurant_id: Number(document.getElementById('fRest').value)
   };
   if (editId) {
     await api(`/api/food-items/${encodeURIComponent(editId)}`, { method: 'PUT', body });
@@ -76,11 +86,10 @@ async function del(id) {
 
 function resetForm() {
   document.getElementById('editId').value = '';
-  document.getElementById('fId').value = '';
-  document.getElementById('fId').disabled = false;
   document.getElementById('fName').value = '';
+  document.getElementById('fName').disabled = false;
+  document.getElementById('fRest').value = '';
   document.getElementById('fPrice').value = '';
-  document.getElementById('fRating').value = '';
   document.getElementById('modalTitle').textContent = 'Add Food Item';
 }
 
